@@ -1,28 +1,20 @@
-# geneid_to_genesymbol_chr
+source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
+# geneid_to_genesymbol
 #
 # Converts NCBI gene IDs to official gene symbols.
 # 
-# Hugo Botelho
-# v0.1
-# 14 November 2019
+# Hugo Botelho & André Falcão
+# v0.2
+# 12 January 2021
 #
 # Input: 
 #	* geneids: vector (character or numeric), with NCBI gene IDs
+#   * asvector: output as character vector? Othwerwise, the output will be a data.frame
 #	* showProgress: logical, print progress to console?
-# Output: character vector, with gene symbols
-#
-# Dependencies: rentrez
-
-
-if(!("rentrez" %in% installed.packages())) install.packages("rentrez")
-library(rentrez)
-
-
-geneid_to_genesymbol_chr <- function(geneids, showProgress = FALSE){
+# Output: data frame or character, with the input and corresponding gene symbols
+geneid_to_genesymbol <- function(geneids, asvector=TRUE, showProgress = FALSE){
     
-    #geneids <- 1080
-        
-    results <- sapply(geneids, function(geneid){
+    output <- lapply(geneids, function(geneid){
         
         if(showProgress) print(paste0("Converting '", geneid, "' to Uniprot ID"), quote=FALSE)
         
@@ -56,9 +48,25 @@ geneid_to_genesymbol_chr <- function(geneids, showProgress = FALSE){
         id_table <- table(genesymbols)
         genesymbol <- names(which(id_table == max(id_table))[1])
         
-        genesymbol
+        c(geneid, genesymbol)
         
     })
     
-    unlist(results)
+    output <- do.call("rbind", output)
+    output <- as.data.frame(output, stringsAsFactors = FALSE)
+    
+    colnames(output) <- c("geneid", "hgnc_symbol")
+    output <- output[match(geneids, output$geneid),]
+    output$geneid <- geneids
+    class(output$geneid) <- "integer"
+    class(output$hgnc_symbol) <- "character"
+    rownames(output) <- 1:nrow(output)
+    
+    if(asvector){
+        output <- output$hgnc_symbol
+        names(output) <- geneids
+    }
+    
+    output
 }
+

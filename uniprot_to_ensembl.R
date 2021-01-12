@@ -1,105 +1,30 @@
-# uniprot_to_ensembl_chr
+source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
+
+# uniprot_to_ensembl
 #
-# Converts Uniprot IDs to Ensembl Gene IDs. Parallel processing available
+# Converts Uniprot IDs to Ensembl Gene IDs.
 # 
-# Hugo Botelho & Andr√© Falc√£o
-# v0.1
-# 14 November 2019
+# Hugo Botelho & AndrÈ Falc„o
+# v0.2
+# 12 January 2021
 #
 # Input: 
-#	* up: character vector, with Uniprot IDs
-#	* showProgress: logical, print progress to console?
-#	* parallelize: logical, use multi-processors?
-# Output: character vector, with Ensembl gene IDs
-#
-# Dependencies: biomaRt, parallel
-
-
-if(!("biomaRt" %in% installed.packages())){
-	source("https://bioconductor.org/biocLite.R")
-    biocLite("biomaRt")
-}
-if(!("biomaRt" %in% loadedNamespaces())) library(biomaRt)
-if(!exists("myMart")) myMart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")    # This can take a while
-
-if(!("parallel" %in% installed.packages())) install.packages("parallel")
-library(parallel)
-
-
-
-uniprot_to_ensembl_chr <- function(up, showProgress = FALSE, parallelize = FALSE){
-	
-	# Make sure a mart is available
-    if(!exists("myMart")) myMart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")
+#	* genes: character vector, with Uniprot IDs
+# Output: data frame, with the input and corresponding Ensembl gene IDs
+uniprot_to_ensembl <- function(up, asvector=TRUE) {
     
-    up <- as.character(up)
+    output<-getBM(attributes = c('uniprotswissprot', 'ensembl_gene_id'),
+                         filters = 'uniprotswissprot', values = up, mart = myMart,
+                         useCache = FALSE)
+    output<-output[nchar(output$ensembl_gene_id)>0,]
+    output <- output[match(up, output$uniprotswissprot),]
+    output$uniprotswissprot <- up
+    rownames(output) <- 1:nrow(output)
     
-    if(detectCores() <= 2 | !parallelize)
-    {
-        # Single-core processing
-        output <- lapply(up, function(UP){
-            
-            if(showProgress) print(paste0("Converting '", UP, "' to Ensembl ID."), quote = FALSE)
-                
-            if(exists("gene_table")) rm("gene_table")
-            tryCatch({
-                gene_table <- getBM(attributes = c('uniprotswissprot', 'ensembl_gene_id'),
-                                    filters = 'uniprotswissprot', values = UP, mart = myMart)
-                gene_table <- gene_table[gene_table[,2]!="",]
-            },
-            error = function(e){},
-            finally = {
-                if(!exists("gene_table")){
-                    gene_table <- data.frame(uniprotswissprot = character(0),
-                                             ensembl_gene_id = character(0))
-                }
-            })
-            
-            if(nrow(gene_table) == 0){
-                result <- ""
-            } else{
-                result <- gene_table[1,"ensembl_gene_id"]
-            }
-            
-            result
-            
-        })
-        
-    } else
-    {
-        # Multi-core processing
-        cluster <- makePSOCKcluster(detectCores() - 1)
-        clusterExport(cluster, varlist=c("up", "myMart", "getBM"), envir=environment())
-        
-        output <- parLapply(cluster, up, function(UP){
-            
-            if(exists("gene_table")) rm("gene_table")
-            tryCatch({
-                gene_table <- getBM(attributes = c('uniprotswissprot', 'ensembl_gene_id'),
-                                    filters = 'uniprotswissprot', values = UP, mart = myMart)
-                gene_table <- gene_table[gene_table[,2]!="",]
-            },
-            error = function(e){},
-            finally = {
-                if(!exists("gene_table")){
-                    gene_table <- data.frame(uniprotswissprot = character(0),
-                                             ensembl_gene_id = character(0))
-                }
-            })
-            
-            if(nrow(gene_table) == 0){
-                result <- ""
-            } else{
-                result <- gene_table[1,"ensembl_gene_id"]
-            }
-            
-            result
-            
-        })
-        stopCluster(cluster)
+    if(asvector){
+        output <- output$ensembl_gene_id
+        names(output) <- up
     }
     
-    # Return character vector
-    output <- do.call("rbind", output)
-    as.character(output)
+    output
 }

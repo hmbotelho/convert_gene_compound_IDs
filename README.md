@@ -83,12 +83,6 @@ somezinc <- c("ZINC2647", "ZINC53", "ZINC6787", "ZINC35024346", "ZINC52509463", 
 
 The following sections describe and demonstrate the scripts converting between gene/protein identifiers.
 
-```
-source("genesymbol_to_ensemblgene.R")
-```
-
-In the following sections we will see these scripts in action.
-
 
 
 ## <a name="OGS_to_UP">2.1. Gene symbol to Uniprot</a>
@@ -97,26 +91,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `genes`: character vector, with human gene symbols.  
-    * `showProgress`: logical, print progress to console?  
-	* `parallelize`: logical, use multi-processors?  
+    * `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * data frame or character vector  
+    * data.frame or character vector  
 **Dependencies:** `biomaRt`  
 
 ```
-> source("genesymbol_to_uniprot.R")
-> genesymbol_to_uniprot_df(somegenesymbols)
-   hgnc_symbol uniprotswissprot
-1          TAZ           Q16635
-4         CFTR           P13569
-5        BRCA1           P38398
-8       TGFBR3           Q03167
-10      ZNF695           Q8IW36
-11        CRYZ           Q08257
-14       PI4KB           Q9UBF8
+> source("source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/genesymbol_to_uniprot.R")
+> genesymbol_to_uniprot(somegenesymbols, asvector=FALSE)
+  hgnc_symbol uniprotswissprot
+1        CFTR           P13569
+2        CRYZ           Q08257
+3      TGFBR3           Q03167
+4       PI4KB           Q9UBF8
+5         TAZ           Q16635
+6      ZNF695           Q8IW36
+7       BRCA1           P38398
 >
-> genesymbol_to_uniprot_chr(somegenesymbols, showProgress = FALSE, parallelize = TRUE)
-[1] "P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "Q8IW36" "P38398"
+> genesymbol_to_uniprot(somegenesymbols)
+    CFTR     CRYZ   TGFBR3    PI4KB      TAZ   ZNF695    BRCA1 
+"P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "Q8IW36" "P38398" 
 ```
 
 
@@ -127,27 +121,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `genes`: character vector, with human gene symbols  
-    * `showProgress`: logical, print progress to console?  
-	* `parallelize`: logical, use multi-processors?  
+    * `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * data frame or character vector  
-**Dependencies:** `biomaRt`, `parallel`  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`  
 
 ```
-> source("genesymbol_to_ensemblgene.R")
-> genesymbol_to_ensemblgene_df(somegenesymbols)
+> source("source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/genesymbol_to_ensemblgene.R")
+> genesymbol_to_ensemblgene(somegenesymbols, asvector=FALSE)
   hgnc_symbol ensembl_gene_id
-1       BRCA1 ENSG00000012048
-2        CFTR ENSG00000001626
-3        CRYZ ENSG00000116791
+1        CFTR ENSG00000001626
+2        CRYZ ENSG00000116791
+3      TGFBR3 ENSG00000069702
 4       PI4KB ENSG00000143393
 5         TAZ ENSG00000102125
-6      TGFBR3 ENSG00000069702
-7      ZNF695 ENSG00000197472
+6      ZNF695 ENSG00000197472
+7       BRCA1 ENSG00000012048
 >
-> genesymbol_to_ensemblgene_chr(somegenesymbols, showProgress = FALSE, parallelize = TRUE)
-[1] "ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472"
-[7] "ENSG00000012048"
+> genesymbol_to_ensemblgene(somegenesymbols)
+             CFTR              CRYZ            TGFBR3             PI4KB               TAZ            ZNF695             BRCA1 
+"ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472" "ENSG00000012048" 
 ```
 
 
@@ -158,16 +151,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `up`: character vector, with Uniprot IDs  
-	* `showProgress`: logical, print progress to console?  
-	* `parallelize`: logical, use multi-processors?  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * character vector  
-**Dependencies:** `biomaRt`, `parallel`  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`
 
 ```
-> source("uniprot_to_genesymbol.R")
-> uniprot_to_genesymbol_chr(someuniprot, showProgress = F, parallelize = T)
-[1] "CFTR"   "CRYZ"   "TGFBR3" "PI4KB"  "TAZ"    "ZNF695" "BRCA1"
+> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_genesymbol.R")
+> uniprot_to_genesymbol(someuniprot, asvector=FALSE)
+  uniprotswissprot hgnc_symbol
+1           P13569        CFTR
+2           Q08257        CRYZ
+3           Q03167      TGFBR3
+4           Q9UBF8       PI4KB
+5           Q16635         TAZ
+6           Q8IW36      ZNF695
+7           P38398       BRCA1
+>
+> uniprot_to_genesymbol(someuniprot)
+  P13569   Q08257   Q03167   Q9UBF8   Q16635   Q8IW36   P38398 
+  "CFTR"   "CRYZ" "TGFBR3"  "PI4KB"    "TAZ" "ZNF695"  "BRCA1" 
 ```
 
 
@@ -178,17 +181,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `up`: character vector, with Uniprot IDs  
-	* `showProgress`: logical, print progress to console?  
-	* `parallelize`: logical, use multi-processors?  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * character vector  
-**Dependencies:** `biomaRt`, `parallel`  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`
 
 ```
-> source("uniprot_to_ensembl.R")
-> uniprot_to_ensembl_chr(someuniprot, showProgress = F, parallelize = T)
-[1] "ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472"
-[7] "ENSG00000012048"
+> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_ensembl.R")
+> uniprot_to_ensembl(someuniprot, asvector=FALSE)
+  uniprotswissprot ensembl_gene_id
+1           P13569 ENSG00000001626
+2           Q08257 ENSG00000116791
+3           Q03167 ENSG00000069702
+4           Q9UBF8 ENSG00000143393
+5           Q16635 ENSG00000102125
+6           Q8IW36 ENSG00000197472
+7           P38398 ENSG00000012048
+>
+> uniprot_to_ensembl(someuniprot)
+           P13569            Q08257            Q03167            Q9UBF8            Q16635            Q8IW36            P38398 
+"ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472" "ENSG00000012048" 
 ```
 
 
@@ -199,15 +211,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `ens`: character vector, with human ensembl gene IDs  
-	* `showProgress`: logical, print progress to console?  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * character vector  
+    * data.frame or character vector  
 **Dependencies:** `rentrez`  
 
 ```
-> source("ensembl_to_uniprot.R")
-> ensembl_to_uniprot_chr(someensembl, showProgress = F, parallelize = T)
-[1] "P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "Q8IW36" "P38398"
+> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/ensembl_to_uniprot.R")
+> ensembl_to_uniprot(someensembl, asvector=FALSE)
+  ensembl_gene_id uniprotswissprot
+1 ENSG00000001626           P13569
+2 ENSG00000116791           Q08257
+3 ENSG00000069702           Q03167
+4 ENSG00000143393           Q9UBF8
+5 ENSG00000102125           Q16635
+6 ENSG00000197472           Q8IW36
+7 ENSG00000012048           P38398
+>
+> ensembl_to_uniprot(someensembl)
+ENSG00000001626 ENSG00000116791 ENSG00000069702 ENSG00000143393 ENSG00000102125 ENSG00000197472 ENSG00000012048 
+       "P13569"        "Q08257"        "Q03167"        "Q9UBF8"        "Q16635"        "Q8IW36"        "P38398" 
 ```
 
 
@@ -218,15 +241,26 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `geneids`: vector (character or numeric), with NCBI gene IDs  
-	* `showProgress`: logical, print progress to console?  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * character vector  
+    * data.frame or character vector  
 **Dependencies:** `rentrez`  
 
 ```
-> source("geneid_to_genesymbol.R")
-> geneid_to_genesymbol_chr(somegeneids, showProgress = F)
-[1] "CFTR"   "CRYZ"   "TGFBR3" "PI4KB"  "TAZ"    "ZNF695" "BRCA1" 
+> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/geneid_to_genesymbol.R")
+> geneid_to_genesymbol(somegeneids, asvector=FALSE)
+  geneid hgnc_symbol
+1   1080        CFTR
+2   1429        CRYZ
+3   7049      TGFBR3
+4   5298       PI4KB
+5   6901         TAZ
+6  57116      ZNF695
+7    672       BRCA1
+>
+geneid_to_genesymbol(somegeneids)
+    1080     1429     7049     5298     6901    57116      672 
+  "CFTR"   "CRYZ" "TGFBR3"  "PI4KB"    "TAZ" "ZNF695"  "BRCA1" 
 ```
 
 
@@ -237,16 +271,25 @@ In the following sections we will see these scripts in action.
 
 **Input:**  
     * `refseqs`: character vector, with RefSeq protein IDs  
-	* `simplify`: logical, should "P13569.3" be converted to "P13569"?  
-	* `showProgress`: logical, print progress to console?  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
-    * character vector  
+    * data.frame or character vector  
 **Dependencies:** `rentrez`  
 
 ```
-> source("refseq_to_uniprot.R")
-> refseq_to_uniprot_chr(somerefseq, simplify = T, showProgress = F)
-[1] "P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "P38398"
+> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/refseq_to_uniprot.R")
+> refseq_to_uniprot(somerefseq, asvector=FALSE)
+          refseq uniprotswissprot
+1    NP_000483.2           P13569
+2 NP_001123514.1           Q08257
+3    NP_003234.2           Q03167
+4 NP_001185702.1           Q9UBF8
+5    NP_000107.1           Q16635
+6    NP_009225.1           P38398
+>
+> refseq_to_uniprot(somerefseq)
+   NP_000483.2 NP_001123514.1    NP_003234.2 NP_001185702.1    NP_000107.1    NP_009225.1 
+      "P13569"       "Q08257"       "Q03167"       "Q9UBF8"       "Q16635"       "P38398"
 ```
 
 

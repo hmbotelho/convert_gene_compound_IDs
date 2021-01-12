@@ -1,29 +1,22 @@
-# refseq_to_uniprot_chr
+source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
+
+# refseq_to_uniprot
 #
 # Converts refseq protein IDs to Uniprot IDs.
 # 
 # Hugo Botelho
-# v0.1
-# 14 November 2019
+# v0.2
+# 12 January 2021
 #
 # Input: 
 #	* refseqs: character vector, with RefSeq protein IDs
+#   * asvector: output as character vector? Othwerwise, the output will be a data.frame
 #	* simplify: logical, should "P13569.3" be converted to "P13569"?
 #	* showProgress: logical, print progress to console?
-# Output: character vector, with Uniprot IDs
-#
-# Dependencies: rentrez
-
-
-if(!("rentrez" %in% installed.packages())) install.packages("rentrez")
-library(rentrez)
-
-
-refseq_to_uniprot_chr <- function(refseqs, simplify = TRUE, showProgress = FALSE){
+# Output: data frame or character, with the input and corresponding Uniprot IDs
+refseq_to_uniprot <- function(refseqs, asvector=TRUE, simplify = TRUE, showProgress = FALSE){
     
-    #refseqs <- "NP_000483.2"
-    
-    results <- sapply(refseqs, function(REFSEQ){
+    output <- lapply(refseqs, function(REFSEQ){
         
         if(showProgress) print(paste0("Converting '", REFSEQ, "' to Uniprot ID"), quote=FALSE)
         
@@ -63,11 +56,23 @@ refseq_to_uniprot_chr <- function(refseqs, simplify = TRUE, showProgress = FALSE
             Uniprot <- sub("\\..*", "", Uniprot)
         }
         
-        Uniprot
+        c(REFSEQ, Uniprot)
         
     })
     
-	results <- unlist(results)
-	names(results) <- NULL
-	results
+    output <- do.call("rbind", output)
+    output <- as.data.frame(output, stringsAsFactors = FALSE)
+    colnames(output) <- c("refseq", "uniprotswissprot")
+    class(output$refseq) <- "character"
+    class(output$uniprotswissprot) <- "character"
+    output <- output[match(refseqs, output$refseq),]
+    output$refseq <- refseqs
+    rownames(output) <- 1:nrow(output)
+    
+    if(asvector){
+        output <- output$uniprotswissprot
+        names(output) <- refseqs
+    }
+    
+    output
 }
