@@ -23,13 +23,13 @@ The biomaRt scripts were based on previous work by André Falcão (FCUL).
 
 The following converters are currently available:
 
-|                       | To: **Gene symbol** | To: **Uniprot**   | To: **Ensembl**     | To: **Refseq** |  To: **Gene ID** |
-|:---------------------:|:-------------------:|:-----------------:|:-------------------:|:--------------:|:----------------:|
-| From: **Gene symbol** |          X          | [Yes](#OGS_to_UP) | [Yes](#OGS_to_ENSG) |                |                  |
-| From: **Uniprot**     | [Yes](#UP_to_OGS)   |          X        | [Yes](#UP_to_ENS)   |                |                  |
-| From: **Ensembl**     |                     | [Yes](#ENS_to_UP) |          X          |                |                  |
-| From: **Refseq**      |                     | [Yes](#RS_to_UP)  |                     |        X       |                  |
-| From: **Gene ID**     | [Yes](#GID_to_OGS)  | [Yes](#GID_to_UP) | [Yes](#GID_to_ENSG) |                |          X       |
+|                       | To: **Gene symbol** | To: **Uniprot**   | To: **Ensembl**     | To: **Refseq** |  To: **Gene ID**  |
+|:---------------------:|:-------------------:|:-----------------:|:-------------------:|:--------------:|:-----------------:|
+| From: **Gene symbol** |          X          | [Yes](#OGS_to_UP) | [Yes](#OGS_to_ENSG) |                |                   |
+| From: **Uniprot**     | [Yes](#UP_to_OGS)   |          X        | [Yes](#UP_to_ENS)   |                | [Yes](#UP_to_GID) |
+| From: **Ensembl**     |                     | [Yes](#ENS_to_UP) |          X          |                |                   |
+| From: **Refseq**      |                     | [Yes](#RS_to_UP)  |                     |        X       |                   |
+| From: **Gene ID**     | [Yes](#GID_to_OGS)  | [Yes](#GID_to_UP) | [Yes](#GID_to_ENSG) |                |          X        |
 
 
 ## Table of Contents
@@ -40,11 +40,12 @@ The following converters are currently available:
     * [3.2. Gene symbol to Ensembl](#OGS_to_ENSG)
     * [3.3. Uniprot to Gene symbol](#UP_to_OGS)
     * [3.4. Uniprot to Ensembl](#UP_to_ENS)
-    * [3.5. Ensembl to Uniprot](#ENS_to_UP)
-    * [3.6. NCBI Gene ID to Gene symbol](#GID_to_OGS)
-    * [3.7. NCBI Gene ID to Uniprot](#GID_to_UP)
-    * [3.8. NCBI Gene ID to Ensembl](#GID_to_ENSG)
-    * [3.9. RefSeq to Uniprot](#RS_to_UP)
+    * [3.5. Uniprot to NCBI Gene ID](#UP_to_GID)
+    * [3.6. Ensembl to Uniprot](#ENS_to_UP)
+    * [3.7. NCBI Gene ID to Gene symbol](#GID_to_OGS)
+    * [3.8. NCBI Gene ID to Uniprot](#GID_to_UP)
+    * [3.9. NCBI Gene ID to Ensembl](#GID_to_ENSG)
+    * [3.10. RefSeq to Uniprot](#RS_to_UP)
 * [4. Compound converters](#Cconverters)
 
 
@@ -236,7 +237,42 @@ uniprot_to_ensembl(someuniprot)
 
 
 
-## <a name="ENS_to_UP">3.5. Ensembl to Uniprot</a>
+## <a name="UP_to_GID">3.5. Uniprot to Gene ID</a>
+
+**Description:** Converts Uniprot IDs to NCBI Gene IDs.  
+
+**Input:**  
+    * `up`: character vector, with Uniprot IDs  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
+**Output:**  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`
+
+```
+uniprot_to_geneid(someuniprot, asvector=FALSE)
+```
+```
+  uniprotswissprot entrezgene_id
+1           P13569          1080
+2           Q08257          1429
+3           Q03167          7049
+4           Q9UBF8          5298
+5           Q16635          6901
+6           Q8IW36         57116
+7           P38398           672
+```
+
+```
+uniprot_to_geneid(someuniprot)
+```
+```
+P13569 Q08257 Q03167 Q9UBF8 Q16635 Q8IW36 P38398 
+  1080   1429   7049   5298   6901  57116    672
+```
+
+
+
+## <a name="ENS_to_UP">3.6. Ensembl to Uniprot</a>
 
 **Description:** Converts human ensembl gene symbols to Uniprot IDs.  
 
@@ -271,7 +307,7 @@ ENSG00000001626 ENSG00000116791 ENSG00000069702 ENSG00000143393 ENSG00000102125 
 
 
 
-## <a name="GID_to_OGS">3.6. NCBI Gene ID to Gene symbol</a>
+## <a name="GID_to_OGS">3.7. NCBI Gene ID to Gene symbol</a>
 
 **Description:** Converts NCBI gene IDs to Gene symbols.  
 
@@ -306,7 +342,7 @@ geneid_to_genesymbol(somegeneids)
 
 
 
-## <a name="GID_to_UP">3.7. NCBI Gene ID to Uniprot</a>
+## <a name="GID_to_UP">3.8. NCBI Gene ID to Uniprot</a>
 
 **Description:** Converts NCBI gene IDs to Uniprot IDs.  
 
@@ -342,7 +378,7 @@ geneid_to_uniprot(somegeneids)
 
 
 
-## <a name="GID_to_ENSG">3.8. NCBI Gene ID to Ensembl gene IDs</a>
+## <a name="GID_to_ENSG">3.9. NCBI Gene ID to Ensembl gene IDs</a>
 
 **Description:** Converts NCBI gene IDs to Ensembl gene IDs.  
 
@@ -377,7 +413,7 @@ geneid_to_ensemblgene(somegeneids)
 
 
 
-## <a name="RS_to_UP">3.9. RefSeq to Uniprot</a>
+## <a name="RS_to_UP">3.10. RefSeq to Uniprot</a>
 
 **Description:** NCBI RefSeq IDs to Uniprot IDs.  
 
