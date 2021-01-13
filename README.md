@@ -1,4 +1,4 @@
-# Gene/Protein & compound identifier converters
+# Gene/Protein & compound identifier converters in R
 
 Genes and proteins can be referred to by many gene identifiers:
 * Official gene symbol (*e.g.* CFTR)
@@ -29,24 +29,35 @@ The following converters are currently available:
 | From: **Uniprot**     | [Yes](#UP_to_OGS)   |          X        | [Yes](#UP_to_ENS)   |                |                  |
 | From: **Ensembl**     |                     | [Yes](#ENS_to_UP) |          X          |                |                  |
 | From: **Refseq**      |                     | [Yes](#RS_to_UP)  |                     |        X       |                  |
-| From: **Gene ID**     | [Yes](#GID_to_OGS)  |                   |                     |                |          X       |
+| From: **Gene ID**     | [Yes](#GID_to_OGS)  | [Yes](#GID_to_UP) | [Yes](#GID_to_ENSG) |                |          X       |
 
 
 ## Table of Contents
-* [1. Sample data](#sample)
-* [2. Gene/protein converters](#GPconverters)
-    * [2.1. Gene symbol to Uniprot](#OGS_to_UP)
-    * [2.2. Gene symbol to Ensembl](#OGS_to_ENSG)
-    * [2.3. Uniprot to Gene symbol](#UP_to_OGS)
-    * [2.4. Uniprot to Ensembl](#UP_to_ENS)
-    * [2.5. Ensembl to Uniprot](#ENS_to_UP)
-    * [2.6. NCBI Gene ID to Gene symbol](#GID_to_OGS)
-    * [2.7. RefSeq to Uniprot](#RS_to_UP)
-* [3. Compound converters](#Cconverters)
+* [1. Installation](#installation)
+* [2. Sample data](#sample)
+* [3. Gene/protein converters](#GPconverters)
+    * [3.1. Gene symbol to Uniprot](#OGS_to_UP)
+    * [3.2. Gene symbol to Ensembl](#OGS_to_ENSG)
+    * [3.3. Uniprot to Gene symbol](#UP_to_OGS)
+    * [3.4. Uniprot to Ensembl](#UP_to_ENS)
+    * [3.5. Ensembl to Uniprot](#ENS_to_UP)
+    * [3.6. NCBI Gene ID to Gene symbol](#GID_to_OGS)
+    * [3.7. NCBI Gene ID to Uniprot](#GID_to_UP)
+    * [3.8. NCBI Gene ID to Ensembl](#GID_to_ENSG)
+    * [3.9. RefSeq to Uniprot](#RS_to_UP)
+* [4. Compound converters](#Cconverters)
 
 
 
-## <a name="sample">1. Sample data</a>
+## <a name="installation">1. Installation</a>
+
+```
+source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
+```
+
+
+
+## <a name="sample">2. Sample data</a>
 
 Let us use a few genes to show the converters in action.
 ```
@@ -79,13 +90,13 @@ somezinc <- c("ZINC2647", "ZINC53", "ZINC6787", "ZINC35024346", "ZINC52509463", 
 
 
 
-## <a name="GPconverters">2. Gene/protein converters</a>
+## <a name="GPconverters">3. Gene/protein converters</a>
 
 The following sections describe and demonstrate the scripts converting between gene/protein identifiers.
 
 
 
-## <a name="OGS_to_UP">2.1. Gene symbol to Uniprot</a>
+## <a name="OGS_to_UP">3.1. Gene symbol to Uniprot</a>
 
 **Description:** Converts human gene symbols to Uniprot IDs.  
 
@@ -97,8 +108,9 @@ The following sections describe and demonstrate the scripts converting between g
 **Dependencies:** `biomaRt`  
 
 ```
-> source("source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/genesymbol_to_uniprot.R")
-> genesymbol_to_uniprot(somegenesymbols, asvector=FALSE)
+genesymbol_to_uniprot(somegenesymbols, asvector=FALSE)
+```
+```
   hgnc_symbol uniprotswissprot
 1        CFTR           P13569
 2        CRYZ           Q08257
@@ -107,15 +119,19 @@ The following sections describe and demonstrate the scripts converting between g
 5         TAZ           Q16635
 6      ZNF695           Q8IW36
 7       BRCA1           P38398
->
-> genesymbol_to_uniprot(somegenesymbols)
+```
+
+```
+genesymbol_to_uniprot(somegenesymbols)
+```
+```
     CFTR     CRYZ   TGFBR3    PI4KB      TAZ   ZNF695    BRCA1 
 "P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "Q8IW36" "P38398" 
 ```
 
 
 
-## <a name="OGS_to_ENSG">2.2. Gene symbol to Ensembl</a>
+## <a name="OGS_to_ENSG">3.2. Gene symbol to Ensembl</a>
 
 **Description:** Converts human gene symbols to Ensembl gene IDs.  
 
@@ -127,8 +143,9 @@ The following sections describe and demonstrate the scripts converting between g
 **Dependencies:** `biomaRt`  
 
 ```
-> source("source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/genesymbol_to_ensemblgene.R")
-> genesymbol_to_ensemblgene(somegenesymbols, asvector=FALSE)
+genesymbol_to_ensemblgene(somegenesymbols, asvector=FALSE)
+```
+```
   hgnc_symbol ensembl_gene_id
 1        CFTR ENSG00000001626
 2        CRYZ ENSG00000116791
@@ -137,15 +154,19 @@ The following sections describe and demonstrate the scripts converting between g
 5         TAZ ENSG00000102125
 6      ZNF695 ENSG00000197472
 7       BRCA1 ENSG00000012048
->
-> genesymbol_to_ensemblgene(somegenesymbols)
+```
+
+```
+genesymbol_to_ensemblgene(somegenesymbols)
+```
+```
              CFTR              CRYZ            TGFBR3             PI4KB               TAZ            ZNF695             BRCA1 
 "ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472" "ENSG00000012048" 
 ```
 
 
 
-## <a name="UP_to_OGS">2.3. Uniprot to Gene symbol</a>
+## <a name="UP_to_OGS">3.3. Uniprot to Gene symbol</a>
 
 **Description:** Converts Uniprot IDs to human gene symbols.  
 
@@ -157,8 +178,9 @@ The following sections describe and demonstrate the scripts converting between g
 **Dependencies:** `biomaRt`
 
 ```
-> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_genesymbol.R")
-> uniprot_to_genesymbol(someuniprot, asvector=FALSE)
+uniprot_to_genesymbol(someuniprot, asvector=FALSE)
+```
+```
   uniprotswissprot hgnc_symbol
 1           P13569        CFTR
 2           Q08257        CRYZ
@@ -167,15 +189,19 @@ The following sections describe and demonstrate the scripts converting between g
 5           Q16635         TAZ
 6           Q8IW36      ZNF695
 7           P38398       BRCA1
->
-> uniprot_to_genesymbol(someuniprot)
+```
+
+```
+uniprot_to_genesymbol(someuniprot)
+```
+```
   P13569   Q08257   Q03167   Q9UBF8   Q16635   Q8IW36   P38398 
   "CFTR"   "CRYZ" "TGFBR3"  "PI4KB"    "TAZ" "ZNF695"  "BRCA1" 
 ```
 
 
 
-## <a name="UP_to_ENS">2.4. Uniprot to Ensembl</a>
+## <a name="UP_to_ENS">3.4. Uniprot to Ensembl</a>
 
 **Description:** Converts Uniprot IDs to Ensembl gene IDs.  
 
@@ -187,8 +213,9 @@ The following sections describe and demonstrate the scripts converting between g
 **Dependencies:** `biomaRt`
 
 ```
-> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_ensembl.R")
-> uniprot_to_ensembl(someuniprot, asvector=FALSE)
+uniprot_to_ensembl(someuniprot, asvector=FALSE)
+```
+```
   uniprotswissprot ensembl_gene_id
 1           P13569 ENSG00000001626
 2           Q08257 ENSG00000116791
@@ -197,15 +224,19 @@ The following sections describe and demonstrate the scripts converting between g
 5           Q16635 ENSG00000102125
 6           Q8IW36 ENSG00000197472
 7           P38398 ENSG00000012048
->
-> uniprot_to_ensembl(someuniprot)
+```
+
+```
+uniprot_to_ensembl(someuniprot)
+```
+```
            P13569            Q08257            Q03167            Q9UBF8            Q16635            Q8IW36            P38398 
 "ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472" "ENSG00000012048" 
 ```
 
 
 
-## <a name="ENS_to_UP">2.5. Ensembl to Uniprot</a>
+## <a name="ENS_to_UP">3.5. Ensembl to Uniprot</a>
 
 **Description:** Converts human ensembl gene symbols to Uniprot IDs.  
 
@@ -217,8 +248,9 @@ The following sections describe and demonstrate the scripts converting between g
 **Dependencies:** `rentrez`  
 
 ```
-> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/ensembl_to_uniprot.R")
-> ensembl_to_uniprot(someensembl, asvector=FALSE)
+ensembl_to_uniprot(someensembl, asvector=FALSE)
+```
+```
   ensembl_gene_id uniprotswissprot
 1 ENSG00000001626           P13569
 2 ENSG00000116791           Q08257
@@ -227,15 +259,19 @@ The following sections describe and demonstrate the scripts converting between g
 5 ENSG00000102125           Q16635
 6 ENSG00000197472           Q8IW36
 7 ENSG00000012048           P38398
->
-> ensembl_to_uniprot(someensembl)
+```
+
+```
+ensembl_to_uniprot(someensembl)
+```
+```
 ENSG00000001626 ENSG00000116791 ENSG00000069702 ENSG00000143393 ENSG00000102125 ENSG00000197472 ENSG00000012048 
        "P13569"        "Q08257"        "Q03167"        "Q9UBF8"        "Q16635"        "Q8IW36"        "P38398" 
 ```
 
 
 
-## <a name="GID_to_OGS">2.6. NCBI Gene ID to Gene symbol</a>
+## <a name="GID_to_OGS">3.6. NCBI Gene ID to Gene symbol</a>
 
 **Description:** Converts NCBI gene IDs to Gene symbols.  
 
@@ -244,28 +280,104 @@ ENSG00000001626 ENSG00000116791 ENSG00000069702 ENSG00000143393 ENSG00000102125 
 	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
     * data.frame or character vector  
-**Dependencies:** `rentrez`  
+**Dependencies:** `biomaRt`, `rentrez`  
 
 ```
-> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/geneid_to_genesymbol.R")
-> geneid_to_genesymbol(somegeneids, asvector=FALSE)
-  geneid hgnc_symbol
-1   1080        CFTR
-2   1429        CRYZ
-3   7049      TGFBR3
-4   5298       PI4KB
-5   6901         TAZ
-6  57116      ZNF695
-7    672       BRCA1
->
+geneid_to_genesymbol(somegeneids, asvector=FALSE)
+```
+```
+  entrezgene_id hgnc_symbol
+1          1080        CFTR
+2          1429        CRYZ
+3          7049      TGFBR3
+4          5298       PI4KB
+5          6901         TAZ
+6         57116      ZNF695
+7           672       BRCA1
+```
+
+```
 geneid_to_genesymbol(somegeneids)
+```
+```
     1080     1429     7049     5298     6901    57116      672 
   "CFTR"   "CRYZ" "TGFBR3"  "PI4KB"    "TAZ" "ZNF695"  "BRCA1" 
 ```
 
 
 
-## <a name="RS_to_UP">2.7. RefSeq to Uniprot</a>
+## <a name="GID_to_UP">3.7. NCBI Gene ID to Uniprot</a>
+
+**Description:** Converts NCBI gene IDs to Uniprot IDs.  
+
+**Input:**  
+    * `geneids`: vector (character or numeric), with NCBI gene IDs  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
+**Output:**  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`, `rentrez`  
+
+```
+geneid_to_uniprot(somegeneids, asvector=FALSE)
+  
+```
+```
+  entrezgene_id uniprotswissprot
+1          1080           P13569
+2          1429           Q08257
+3          7049           Q03167
+4          5298           Q9UBF8
+5          6901           Q16635
+6         57116           Q8IW36
+7           672           P38398
+```
+
+```
+geneid_to_uniprot(somegeneids)
+```
+```
+    1080     1429     7049     5298     6901    57116      672 
+"P13569" "Q08257" "Q03167" "Q9UBF8" "Q16635" "Q8IW36" "P38398" 
+```
+
+
+
+## <a name="GID_to_ENSG">3.8. NCBI Gene ID to Ensembl gene IDs</a>
+
+**Description:** Converts NCBI gene IDs to Ensembl gene IDs.  
+
+**Input:**  
+    * `geneids`: vector (character or numeric), with NCBI gene IDs  
+	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
+**Output:**  
+    * data.frame or character vector  
+**Dependencies:** `biomaRt`, `rentrez`  
+
+```
+geneid_to_ensemblgene(somegeneids, asvector=FALSE)
+```
+```
+  entrezgene_id ensembl_gene_id
+1          1080 ENSG00000001626
+2          1429 ENSG00000116791
+3          7049 ENSG00000069702
+4          5298 ENSG00000143393
+5          6901 ENSG00000102125
+6         57116 ENSG00000197472
+7           672 ENSG00000012048
+```
+
+```
+geneid_to_ensemblgene(somegeneids)
+```
+```
+             1080              1429              7049              5298              6901             57116               672 
+"ENSG00000001626" "ENSG00000116791" "ENSG00000069702" "ENSG00000143393" "ENSG00000102125" "ENSG00000197472" "ENSG00000012048"
+```
+
+
+
+## <a name="RS_to_UP">3.9. RefSeq to Uniprot</a>
 
 **Description:** NCBI RefSeq IDs to Uniprot IDs.  
 
@@ -274,11 +386,12 @@ geneid_to_genesymbol(somegeneids)
 	* `asvector`: logical, output as character? Otherwise, the output will be a data frame.  
 **Output:**  
     * data.frame or character vector  
-**Dependencies:** `rentrez`  
+**Dependencies:** `biomaRt`, `rentrez`  
 
 ```
-> source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/refseq_to_uniprot.R")
-> refseq_to_uniprot(somerefseq, asvector=FALSE)
+refseq_to_uniprot(somerefseq, asvector=FALSE)
+```
+```
           refseq uniprotswissprot
 1    NP_000483.2           P13569
 2 NP_001123514.1           Q08257
@@ -286,15 +399,19 @@ geneid_to_genesymbol(somegeneids)
 4 NP_001185702.1           Q9UBF8
 5    NP_000107.1           Q16635
 6    NP_009225.1           P38398
->
-> refseq_to_uniprot(somerefseq)
+```
+
+```
+refseq_to_uniprot(somerefseq)
+```
+```
    NP_000483.2 NP_001123514.1    NP_003234.2 NP_001185702.1    NP_000107.1    NP_009225.1 
-      "P13569"       "Q08257"       "Q03167"       "Q9UBF8"       "Q16635"       "P38398"
+      "P13569"       "Q08257"       "Q03167"       "Q9UBF8"       "Q16635"       "P38398" 
 ```
 
 
 
-## <a name="Cconverters">3. Compound converters</a>
+## <a name="Cconverters">4. Compound converters</a>
 
 The following sections describe and demonstrate the scripts converting between compound identifiers.
 

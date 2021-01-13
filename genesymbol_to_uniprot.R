@@ -1,5 +1,3 @@
-source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
-
 # genesymbol_to_uniprot
 #
 # Converts human gene symbols to Uniprot IDs

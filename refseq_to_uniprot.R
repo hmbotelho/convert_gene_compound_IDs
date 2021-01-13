@@ -1,5 +1,3 @@
-source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
-
 # refseq_to_uniprot
 #
 # Converts refseq protein IDs to Uniprot IDs.

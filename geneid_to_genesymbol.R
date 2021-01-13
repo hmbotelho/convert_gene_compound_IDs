@@ -1,4 +1,3 @@
-source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/initialize.R")
 # geneid_to_genesymbol
 #
 # Converts NCBI gene IDs to official gene symbols.
@@ -55,10 +54,10 @@ geneid_to_genesymbol <- function(geneids, asvector=TRUE, showProgress = FALSE){
     output <- do.call("rbind", output)
     output <- as.data.frame(output, stringsAsFactors = FALSE)
     
-    colnames(output) <- c("geneid", "hgnc_symbol")
-    output <- output[match(geneids, output$geneid),]
-    output$geneid <- geneids
-    class(output$geneid) <- "integer"
+    colnames(output) <- c("entrezgene_id", "hgnc_symbol")
+    output <- output[match(geneids, output$entrezgene_id),]
+    output$entrezgene_id <- geneids
+    class(output$entrezgene_id) <- "integer"
     class(output$hgnc_symbol) <- "character"
     rownames(output) <- 1:nrow(output)
     
