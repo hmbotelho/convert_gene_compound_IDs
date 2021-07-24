@@ -43,3 +43,4 @@ source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/ma
 source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_ensembl.R")
 source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_geneid.R")
 source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_genesymbol.R")
+source("https://raw.githubusercontent.com/hmbotelho/convert_gene_compound_IDs/master/uniprot_to_genename.R")
