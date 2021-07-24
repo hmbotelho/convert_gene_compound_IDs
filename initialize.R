@@ -25,6 +25,8 @@ if(!("biomaRt" %in% installed.packages())){
 }
 setupPackages("biomaRt")
 setupPackages("rentrez")
+setupPackages("XML")
+setupPackages("parallel")
 
 
 if(!exists("myMart")) myMart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")    # This can take a while
